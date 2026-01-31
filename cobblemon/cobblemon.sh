@@ -1,4 +1,5 @@
 #!/bin/ash
+set -e
 
 # Check if EULA has been accepted
 if [ -z "$EULA" ]; then
@@ -6,29 +7,38 @@ if [ -z "$EULA" ]; then
     exit 1
 fi
 
-# Set versions for fabric jar
-MINECRAFT_VERSION=1.21.1
-FABRIC_LOADER_VERSION=0.16.10
-INSTALLER_VERSION=1.0.1
-FABRIC_API_VERSION=0.115.0
-COBBLEMON_VERSION=1.6.1
+# Default the allocated RAM to 8G if not set
+ALLOCATED_RAM="${ALLOCATED_RAM:-8G}"
 
-# Default the allocated ram to 8G if not set
-if [ -z "$ALLOCATED_RAM" ]; then
-    echo "Variable ALLOCATED_RAM not defined."
-    ALLOCATED_RAM="8G"
+# Server files are pre-downloaded in /home/cobblemon/server during image build
+# The world directory is used for persistent data (mounted as volume)
+WORLD_DIR="/home/cobblemon/world"
+SERVER_DIR="/home/cobblemon/server"
+
+# Create world directory structure
+mkdir -p "$WORLD_DIR/mods"
+
+# Copy mods to world directory (allows volume persistence and custom mods)
+cp -n "$SERVER_DIR/mods/"*.jar "$WORLD_DIR/mods/" 2>/dev/null || true
+
+# Copy server launcher if not present
+cp -n "$SERVER_DIR/fabric-server-launcher.jar" "$WORLD_DIR/" 2>/dev/null || true
+
+# Set up EULA
+echo "eula=${EULA}" > "$WORLD_DIR/eula.txt"
+
+# Fix permissions
+chown -R cobblemon:cobblemon "$WORLD_DIR"
+chmod +x "$WORLD_DIR/fabric-server-launcher.jar"
+
+# Print version info
+if [ -f /home/cobblemon/version.txt ]; then
+    echo "=== Cobblemon Server ==="
+    cat /home/cobblemon/version.txt
+    echo "ALLOCATED_RAM=${ALLOCATED_RAM}"
+    echo "========================"
 fi
 
-# Install the Fabric API mod -> https://modrinth.com/mod/fabric-api
-mkdir /home/cobblemon/world/mods
-cd /home/cobblemon/world/mods
-wget "https://cdn.modrinth.com/data/P7dR8mSH/versions/9YVrKY0Z/fabric-api-${FABRIC_API_VERSION}%2B${MINECRAFT_VERSION}.jar"
-wget "https://cdn.modrinth.com/data/MdwFAVRL/versions/v77SHSXW/Cobblemon-fabric-${COBBLEMON_VERSION}%2B${MINECRAFT_VERSION}.jar"
-
-# Download the Fabric jar and launch it -> https://fabricmc.net/use/server/
-cd /home/cobblemon/world
-wget -O fabric-server-mc-loader-launcher.jar "https://meta.fabricmc.net/v2/versions/loader/${MINECRAFT_VERSION}/${FABRIC_LOADER_VERSION}/${INSTALLER_VERSION}/server/jar"
-echo "eula=${EULA}" > eula.txt
-chown -R cobblemon:cobblemon /home/cobblemon
-chmod +x fabric-server-mc-loader-launcher.jar
-su -c "java -Xmx${ALLOCATED_RAM} -jar fabric-server-mc-loader-launcher.jar nogui" cobblemon
+# Start the server
+cd "$WORLD_DIR"
+exec su -c "java -Xmx${ALLOCATED_RAM} -jar fabric-server-launcher.jar nogui" cobblemon
