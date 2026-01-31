@@ -48,4 +48,4 @@ jobs:
           push: true
           tags: |
             public.ecr.aws/k8k6f0h1/cobblemon:latest
-            public.ecr.aws/k8k6f0h1/cobblemon:${{ steps.date.outputs.date }}
+            public.ecr.aws/k8k6f0h1/cobblemon:1.7.3
