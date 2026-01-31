@@ -13,7 +13,7 @@ permissions:
 jobs:
   push_to_registry:
     name: Push minecraft image to ECR Public
-    runs-on: ubuntu-latest
+    runs-on: game-containers-runner
     steps:
       - name: Checkout
         uses: actions/checkout@v4
