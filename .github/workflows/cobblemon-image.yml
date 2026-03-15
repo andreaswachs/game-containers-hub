@@ -5,15 +5,16 @@ on:
   push:
     paths:
       - cobblemon/**
+      - ./github/workflows/cobblemon-image.yaml
 
 permissions:
-  id-token: write
   contents: read
+  packages: write
 
 jobs:
   push_to_registry:
-    name: Push cobblemon image to ECR Public
-    runs-on: game-containers-runner
+    name: Push cobblemon image to GHCR
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,16 +33,12 @@ jobs:
             echo "${key}=${value}" >> $GITHUB_OUTPUT
           done < cobblemon/versions.env
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
-          role-to-assume: arn:aws:iam::848765924217:role/ci-game-containers-hub
-          aws-region: us-east-1
-
-      - name: Login to ECR Public
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          registry-type: public
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -65,5 +62,5 @@ jobs:
             FABRIC_API_MODRINTH_ID=${{ steps.versions.outputs.FABRIC_API_MODRINTH_ID }}
             COBBLEMON_MODRINTH_ID=${{ steps.versions.outputs.COBBLEMON_MODRINTH_ID }}
           tags: |
-            public.ecr.aws/k8k6f0h1/cobblemon:latest
-            public.ecr.aws/k8k6f0h1/cobblemon:${{ steps.versions.outputs.COBBLEMON_VERSION }}
+            ghcr.io/${{ github.repository_owner }}/cobblemon:latest
+            ghcr.io/${{ github.repository_owner }}/cobblemon:${{ steps.versions.outputs.COBBLEMON_VERSION }}
