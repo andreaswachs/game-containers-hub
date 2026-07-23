@@ -59,7 +59,7 @@ MODS = [
      "required", "required"),
     ("XaDC71GB", "JWtSqSeY", "lithostitched-1.7.13-fabric-21.1.jar",
      "https://cdn.modrinth.com/data/XaDC71GB/versions/JWtSqSeY/lithostitched-1.7.13-fabric-21.1.jar",
-     "unsupported", "required"),
+     "required", "required"),
     ("BAscRYKm", "6h2mVZcb", "chipped-fabric-1.21.1-4.0.2.jar",
      "https://cdn.modrinth.com/data/BAscRYKm/versions/6h2mVZcb/chipped-fabric-1.21.1-4.0.2.jar",
      "required", "required"),
@@ -71,7 +71,7 @@ MODS = [
      "required", "required"),
     ("b1ZV3DIJ", "JfyYsWKP", "athena-fabric-1.21.1-4.0.6.jar",
      "https://cdn.modrinth.com/data/b1ZV3DIJ/versions/JfyYsWKP/athena-fabric-1.21.1-4.0.6.jar",
-     "required", "unsupported"),
+     "required", "optional"),
 ]
 
 files_entry = []
