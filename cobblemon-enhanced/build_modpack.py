@@ -1,6 +1,6 @@
-import json, os, hashlib, urllib.request, zipfile, io
+import json, os, hashlib, urllib.request, zipfile, tempfile
 
-WORK = "/var/folders/47/c_h9wxj53815sccy_t284_2h0000gn/T/opencode/modpack"
+WORK = tempfile.mkdtemp(prefix="modpack_")
 MODS_DIR = os.path.join(WORK, "mods")
 os.makedirs(MODS_DIR, exist_ok=True)
 
@@ -105,7 +105,7 @@ for project_id, version_id, filename, url, client_side, server_side in MODS:
         "path": f"mods/{filename}",
         "hashes": {"sha1": sha1, "sha512": sha512},
         "downloads": [url],
-        "file_size": size,
+        "fileSize": size,
         "env": env,
     })
 
@@ -127,7 +127,7 @@ with open(os.path.join(WORK, "modrinth.index.json"), "w") as f:
 print(f"\nDownloaded {len(MODS)} mods")
 print("Creating .mrpack...")
 
-output_path = os.path.expanduser("~/Source/game-containers-hub/cobblemon/cobblemon-enhanced.mrpack")
+output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cobblemon-enhanced.mrpack")
 with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as zf:
     zf.write(os.path.join(WORK, "modrinth.index.json"), "modrinth.index.json")
     for filename in os.listdir(MODS_DIR):
