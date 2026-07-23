@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - cobblemon/**
-      - .github/workflows/cobblemon-image.yml
+      - ./github/workflows/cobblemon-image.yaml
 
 permissions:
   contents: read
@@ -61,24 +61,6 @@ jobs:
             FABRIC_API_VERSION=${{ steps.versions.outputs.FABRIC_API_VERSION }}
             FABRIC_API_MODRINTH_ID=${{ steps.versions.outputs.FABRIC_API_MODRINTH_ID }}
             COBBLEMON_MODRINTH_ID=${{ steps.versions.outputs.COBBLEMON_MODRINTH_ID }}
-            MEGA_SHOWDOWN_MODRINTH_ID=${{ steps.versions.outputs.MEGA_SHOWDOWN_MODRINTH_ID }}
-            NAVAS_ZAMEGA_MODRINTH_ID=${{ steps.versions.outputs.NAVAS_ZAMEGA_MODRINTH_ID }}
-            MEGA_SHOWDOWN_ITEM_PACK_MODRINTH_ID=${{ steps.versions.outputs.MEGA_SHOWDOWN_ITEM_PACK_MODRINTH_ID }}
-            MYTHS_AND_LEGENDS_MODRINTH_ID=${{ steps.versions.outputs.MYTHS_AND_LEGENDS_MODRINTH_ID }}
-            LEGENDARY_MONUMENTS_MODRINTH_ID=${{ steps.versions.outputs.LEGENDARY_MONUMENTS_MODRINTH_ID }}
-            LEGENDS_MYTHS_MODRINTH_ID=${{ steps.versions.outputs.LEGENDS_MYTHS_MODRINTH_ID }}
-            COMPLETE_COBBLEMON_COLLECTION_MODRINTH_ID=${{ steps.versions.outputs.COMPLETE_COBBLEMON_COLLECTION_MODRINTH_ID }}
-            RADICAL_TRAINERS_MODRINTH_ID=${{ steps.versions.outputs.RADICAL_TRAINERS_MODRINTH_ID }}
-            RCT_API_MODRINTH_ID=${{ steps.versions.outputs.RCT_API_MODRINTH_ID }}
-            RAD_GYMS_MODRINTH_ID=${{ steps.versions.outputs.RAD_GYMS_MODRINTH_ID }}
-            ARCHITECTURY_API_MODRINTH_ID=${{ steps.versions.outputs.ARCHITECTURY_API_MODRINTH_ID }}
-            ACCESSORIES_MODRINTH_ID=${{ steps.versions.outputs.ACCESSORIES_MODRINTH_ID }}
-            OWO_LIB_MODRINTH_ID=${{ steps.versions.outputs.OWO_LIB_MODRINTH_ID }}
-            LITHOSTITCHED_MODRINTH_ID=${{ steps.versions.outputs.LITHOSTITCHED_MODRINTH_ID }}
-            CHIPPED_MODRINTH_ID=${{ steps.versions.outputs.CHIPPED_MODRINTH_ID }}
-            FORGE_CONFIG_API_PORT_MODRINTH_ID=${{ steps.versions.outputs.FORGE_CONFIG_API_PORT_MODRINTH_ID }}
-            RESOURCEFUL_LIB_MODRINTH_ID=${{ steps.versions.outputs.RESOURCEFUL_LIB_MODRINTH_ID }}
-            ATHENA_MODRINTH_ID=${{ steps.versions.outputs.ATHENA_MODRINTH_ID }}
           tags: |
             ghcr.io/${{ github.repository_owner }}/cobblemon:latest
             ghcr.io/${{ github.repository_owner }}/cobblemon:${{ steps.versions.outputs.COBBLEMON_VERSION }}
